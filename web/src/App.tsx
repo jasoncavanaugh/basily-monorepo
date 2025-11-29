@@ -17,7 +17,9 @@ function AppInner() {
   const qry = useQuery({
     queryKey: ["/api/test"],
     queryFn: async () => {
-      const resp = await fetch("/api/test");
+      const resp = await fetch(
+        `https://${import.meta.env.VITE_BACKEND_HOST}/api/test`
+      );
       if (!resp.ok) {
         throw new Error();
       }
