@@ -4,10 +4,19 @@
 .vscode/*
 !.vscode/launch.json
 !.vscode/*.code-snippets
+!.vscode/extensions.json
+.idea
 .idea/workspace.xml
 .idea/usage.statistics.xml
 .idea/shelf
 dist/*
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.local
+.DS_Store
 
 # deps
 node_modules/
@@ -24,6 +33,3 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-
-# misc
-.DS_Store

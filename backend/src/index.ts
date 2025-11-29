@@ -9,4 +9,8 @@ app.get("/", (c) => {
   return c.text("Hello Hono!");
 });
 
+app.get("/api/test", (c) => {
+  return c.json({ description: "Hi there again" });
+});
+
 export default app;

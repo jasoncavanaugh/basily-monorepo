@@ -1,35 +1,36 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from "@tanstack/react-query";
 
+const qc = new QueryClient();
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <QueryClientProvider client={qc}>
+      <AppInner />
+    </QueryClientProvider>
+  );
 }
 
-export default App
+function AppInner() {
+  const qry = useQuery({
+    queryKey: ["/api/test"],
+    queryFn: async () => {
+      const resp = await fetch("/api/test");
+      if (!resp.ok) {
+        throw new Error();
+      }
+      return resp.json();
+    },
+  });
+  if (qry.status === "error") {
+    return <div>Error...</div>;
+  }
+  if (qry.status === "pending") {
+    return <div>Loading...</div>;
+  }
+  return <div>{JSON.stringify(qry.data)}</div>;
+}
+
+export default App;
