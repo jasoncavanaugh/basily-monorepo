@@ -1,5 +1,6 @@
 {
-  "name": "bun-hono-w-pnpm",
+  "name": "backend",
+  "description": "Backend for services",
   "type": "module",
   "scripts": {
     "db:generate": "drizzle-kit generate",
