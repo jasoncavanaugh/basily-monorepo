@@ -39,7 +39,9 @@
     "react-native-worklets": "0.5.1"
   },
   "devDependencies": {
+    "@tailwindcss/cli": "^4.0.0",
     "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~10.0.0",
     "prettier-plugin-tailwindcss": "^0.5.14",

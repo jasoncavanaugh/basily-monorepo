@@ -8,16 +8,14 @@ const qc = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={qc}>
-      <div>Here</div>
+      <div>Here yet again hahah</div>
       <AppInner />
     </QueryClientProvider>
   );
 }
 
 function AppInner() {
-  return (
-    <div>Here is another piece of text.</div>
-  )
+  return <div>Here is another piece of text.</div>;
   // const qry = useQuery({
   //   queryKey: ["/api/test"],
   //   queryFn: async () => {
