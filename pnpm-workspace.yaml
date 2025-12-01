@@ -5,6 +5,7 @@ packages:
 
 catalogs:
   # Can be referenced through "catalog:react-19"
+  # Ok, so we aren't going to use these because this is causing complications on Railway. We will leave this here for reference
   react-19:
     react: 19.1.0
     react-dom: 19.1.0
