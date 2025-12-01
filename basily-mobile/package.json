@@ -1,6 +1,7 @@
 {
-  "name": "mobile",
+  "name": "basily-mobile",
   "main": "expo-router/entry",
+  "description": "React Native app for Basily",
   "version": "1.0.0",
   "scripts": {
     "start": "expo start",

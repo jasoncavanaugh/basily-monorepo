@@ -1,5 +1,6 @@
 {
-  "name": "web",
+  "name": "basily-web",
+  "description": "Next.js app for Basily",
   "private": true,
   "version": "0.0.0",
   "type": "module",

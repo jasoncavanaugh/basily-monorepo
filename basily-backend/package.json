@@ -1,6 +1,6 @@
 {
-  "name": "backend",
-  "description": "Backend for services",
+  "name": "basily-backend",
+  "description": "Backend for Basily",
   "type": "module",
   "scripts": {
     "db:generate": "drizzle-kit generate",
