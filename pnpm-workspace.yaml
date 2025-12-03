@@ -1,7 +1,7 @@
 packages:
-  - web
-  - backend
-  - mobile
+  - basily-web
+  - basily-backend
+  - basily-mobile
 
 catalogs:
   # Can be referenced through "catalog:react-19"
