@@ -4,6 +4,8 @@ import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { Logo } from "src/components/Logo";
 import { Spinner } from "src/components/Spinner";
 import { ThemeButton } from "src/components/ThemeButton";
+import { use_is_authed_or_redirect } from "src/hooks/useIsAuthedOrRedirect";
+import { useWindowDimensions } from "src/hooks/useWindowDimensions";
 import { auth_client } from "src/utils/auth-client";
 import { cents_to_dollars_display } from "src/utils/centsToDollarDisplay";
 import { cn } from "src/utils/cn";
@@ -15,12 +17,7 @@ import {
   RADIX_MODAL_OVERLAY_CLASSES,
   SPINNER_CLASSES
 } from "src/utils/constants";
-import { BASE_COLORS, type BaseColor } from "src/utils/tailwind-colors";
-import { breakpoints } from "src/utils/tailwindBreakpoints";
-import { TW_COLORS_MP } from "src/utils/tailwindColorsMp";
-import { TW_COLORS_TO_HEX_MP } from "src/utils/tailwindColorsToHexMp";
-import { use_is_authed_or_redirect } from "src/utils/useIsAuthedOrRedirect";
-import { useWindowDimensions } from "src/utils/useWindowDimensions";
+import { BASE_COLORS, breakpoints, TW_COLORS_MP, TW_COLORS_TO_HEX_MP, type BaseColor } from "src/utils/tailwind-stuff";
 import { Fab, is_valid_amount, is_valid_date } from "./expenses";
 
 type DayWithExpensesLocal = {

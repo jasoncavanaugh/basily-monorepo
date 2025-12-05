@@ -5,6 +5,12 @@ import { type DateRange } from "react-day-picker";
 import { DatePickerWithRange } from "src/components/DatePickerWithRange";
 import Layout from "src/components/Layout";
 import { Spinner } from "src/components/Spinner";
+import { use_create_expense_category_mtn } from "src/hooks/useCreateExpenseCategoryMtn";
+import { use_create_expense_mtn } from "src/hooks/useCreateExpenseMtn";
+import { use_delete_expense_mutn } from "src/hooks/useDeleteExpenseMtn";
+import { use_expense_categories_qry } from "src/hooks/useExpenseCategoriesQry";
+import { process_days_with_expenses, use_expenses_over_date_range, type DMY, type ExpenseDataByDay } from "src/hooks/useExpenses";
+import { use_is_authed_or_redirect } from "src/hooks/useIsAuthedOrRedirect";
 import { cents_to_dollars_display } from "src/utils/centsToDollarDisplay";
 import {
   BUTTON_HOVER_CLASSES,
@@ -15,25 +21,13 @@ import {
 } from "src/utils/constants";
 import { get_category_ids_to_colors } from "src/utils/getCategoryIdsToColors";
 import { get_category_ids_to_names } from "src/utils/getCategoryIdsToNames";
-import { BASE_COLORS, type BaseColor } from "src/utils/tailwind-colors";
-import { TW_COLORS_MP } from "src/utils/tailwindColorsMp";
+import { BASE_COLORS, TW_COLORS_MP, type BaseColor } from "src/utils/tailwind-stuff";
 import {
   type Expense,
-  type ExpenseCategoryWithBaseColor,
+  type ExpenseCategory
 } from "src/utils/types";
-import { use_create_expense_category_mtn } from "src/utils/useCreateExpenseCategoryMtn";
-import { use_create_expense_mtn } from "src/utils/useCreateExpenseMtn";
-import { use_delete_expense_mutn } from "src/utils/useDeleteExpenseMtn";
-import { use_expense_categories_qry } from "src/utils/useExpenseCategoriesQry";
-import { use_is_authed_or_redirect } from "src/utils/useIsAuthedOrRedirect";
 import { z } from "zod";
 import { cn } from "../utils/cn";
-import {
-  process_days_with_expenses,
-  use_expenses_over_date_range,
-  type DMY,
-  type ExpenseDataByDay,
-} from "../utils/useExpenses";
 import { getDayName } from "./sign-in";
 
 export function date_to_dmy(date: Date): DMY {
@@ -97,22 +91,12 @@ export default function Expenses() {
       : undefined; //...otherwise not
 
   const expense_qry = use_expenses_over_date_range(date_range);
-  // const expense_qry = use_expenses_over_date_range(date_range);
 
   React.useEffect(() => {
     set_client(true);
   }, []);
 
   const session_qry = use_is_authed_or_redirect({ redirect_if: "unauthorized", redirect_url: SIGN_IN_ROUTE });
-  // const session_qry = auth_client.useSession();
-  // React.useEffect(() => {
-  //   const is_authed =
-  //     session_qry.data && session_qry.data.session && session_qry.data.user;
-  //   if (!is_authed) {
-  //     void router.push(SIGN_IN_ROUTE);
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [session_qry.isPending, session_qry.isRefetching]);
 
   if (!client) {
     return undefined;
@@ -349,7 +333,6 @@ function ExpenseButton({
   on_delete: () => void;
 }) {
   const [is_modal_open, set_is_modal_open] = React.useState(false);
-  // const expense_data_qry = use_expenses();
   const delete_expense_mutn = use_delete_expense_mutn({
     on_success: () => {
       // expense_data_qry.invalidate_queries();
@@ -360,16 +343,6 @@ function ExpenseButton({
       alert("error");
     },
   });
-  // const delete_expense_mutn = api.router.delete_expense.useMutation({
-  //   onSuccess: () => {
-  //     // expense_data_qry.invalidate_queries();
-  //     on_delete();
-  //     set_is_modal_open(false); //TODO: Have to figure out how to close the modal once the new data comes in
-  //   },
-  //   onError: () => {
-  //     alert("error");
-  //   },
-  // });
 
   return (
     <RadixModal.Root
@@ -522,16 +495,7 @@ function AddNewExpenseButtonAndModal({
       alert("error");
     },
   });
-  // const create_expense_mtn = api.router.create_expense.useMutation({
-  //   onSuccess: () => {
-  //     set_is_modal_open(false);
-  //     on_create_success();
-  //   },
-  //   onError: (err, data) => {
-  //     console.log(err, data);
-  //     alert("error");
-  //   },
-  // });
+
   const create_category_and_expense_mtn = use_create_expense_category_mtn({
     on_success: (data) => {
       create_expense_mtn.mutate({
@@ -541,22 +505,9 @@ function AddNewExpenseButtonAndModal({
       });
     },
   });
-  // const create_category_and_expense_mtn =
-  //   api.router.create_category.useMutation({
-  //     onSuccess: (data) => {
-  //       create_expense_mtn.mutate({
-  //         category_id: data.id,
-  //         amount: amount,
-  //         date: extract_date_fields(date),
-  //       });
-  //     },
-  //     onError: () => {
-  //       alert("error in create_caegory_and_expense");
-  //     },
-  //   });
 
   function handle_create_expense(
-    expense_categories: Array<ExpenseCategoryWithBaseColor>,
+    expense_categories: Array<ExpenseCategory>,
   ) {
     const does_category_exist =
       expense_categories.filter((exp) => exp.name === category_text).length > 0;

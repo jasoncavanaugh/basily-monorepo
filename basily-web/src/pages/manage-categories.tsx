@@ -1,11 +1,10 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React from "react";
+import { use_edit_expense_category_mtn } from "src/hooks/useEditExpenseCategoryMtn";
+import { use_expense_categories_qry } from "src/hooks/useExpenseCategoriesQry";
 import { cn } from "src/utils/cn";
-import { BASE_COLORS, type BaseColor } from "src/utils/tailwind-colors";
-import { TW_COLORS_MP } from "src/utils/tailwindColorsMp";
+import { BASE_COLORS, TW_COLORS_MP, type BaseColor } from "src/utils/tailwind-stuff";
 import { type ExpenseCategory } from "src/utils/types";
-import { use_edit_expense_category_mtn } from "src/utils/useEditExpenseCategoryMtn";
-import { use_expense_categories_qry } from "src/utils/useExpenseCategoriesQry";
 import { ProfileNav } from "../components/ProfileNav";
 import { Spinner } from "../components/Spinner";
 import { SPINNER_CLASSES } from "../utils/constants";
@@ -72,14 +71,7 @@ function ManageCategoriesDisplay({
     set_edited_category_text(selected_cat.name);
     set_edited_category_color(selected_cat.color);
   }, [selected_category_idx]);
-  // const api_ctx = api.useContext();
   const edit_category_mtn = use_edit_expense_category_mtn()
-  // const edit_category_mtn = api.router.edit_category.useMutation({
-  //   onSuccess: () => {
-  //     void api_ctx.router.get_categories.invalidate();
-  //     //   set_selected_category_idx(0);
-  //   },
-  // });
 
   const does_category_exist = categories.find((c, i) => {
     return (

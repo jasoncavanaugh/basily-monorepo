@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useRouter } from "next/router";
 import React from "react";
-import { auth_client } from "./auth-client";
+import { auth_client } from "src/utils/auth-client";
 
 export function use_is_authed_or_redirect({ redirect_if, redirect_url }: { redirect_if: "authorized" | "unauthorized"; redirect_url: string; }) {
   const session_qry = auth_client.useSession()

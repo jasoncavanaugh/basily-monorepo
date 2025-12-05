@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useMutation } from "@tanstack/react-query";
-import { BACKEND_URL } from "./constants";
-import { type BaseColor } from "./tailwind-colors";
-import { type ExpenseCategory } from "./types";
+import { BACKEND_URL } from "src/utils/constants";
+import { type BaseColor } from "src/utils/tailwind-stuff";
+import { type ExpenseCategory } from "src/utils/types";
 
 export function use_create_expense_category_mtn({
   on_success,

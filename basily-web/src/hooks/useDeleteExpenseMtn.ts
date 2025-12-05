@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useMutation } from "@tanstack/react-query";
-import { BACKEND_URL } from "./constants";
+import { BACKEND_URL } from "src/utils/constants";
 
 export function use_delete_expense_mutn({
   on_success,

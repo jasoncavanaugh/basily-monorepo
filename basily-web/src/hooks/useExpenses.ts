@@ -1,13 +1,9 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useQuery } from "@tanstack/react-query";
 import { subYears } from "date-fns";
+import { BACKEND_URL } from "src/utils/constants";
+import { type DayWithExpenses, type Expense, type ExpenseCategoryWithBaseColor } from "src/utils/types";
 import { create } from "zustand";
-import { BACKEND_URL } from "./constants";
-import {
-  type DayWithExpenses,
-  type Expense,
-  type ExpenseCategoryWithBaseColor,
-} from "./types";
 
 export type DMY = {
   day: number;
@@ -128,7 +124,7 @@ export type ExpenseDataByDay = {
   id: string;
   total_for_day: number;
   date_display: `${number}-${number}-${number}`;
-  category_id_to_expenses: Map<string, Expense[]>;
+  category_id_to_expenses: Map<string, Array<Expense>>;
 };
 
 export function process_days_with_expenses({

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useQuery } from "@tanstack/react-query";
-import { BACKEND_URL } from "./constants";
-import { type ExpenseCategory } from "./types";
+import { BACKEND_URL } from "src/utils/constants";
+import { type ExpenseCategory } from "src/utils/types";
 
 export function use_expense_categories_qry() {
   return useQuery({

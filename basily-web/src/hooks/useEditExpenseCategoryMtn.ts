@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useMutation } from "@tanstack/react-query";
-import { BACKEND_URL } from "./constants";
-import { type ExpenseCategory } from "./types";
+import { BACKEND_URL } from "../utils/constants";
+import { type ExpenseCategory } from "../utils/types";
 
 export function use_edit_expense_category_mtn() {
   return useMutation({
