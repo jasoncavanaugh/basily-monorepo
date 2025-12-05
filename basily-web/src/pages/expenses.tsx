@@ -1,46 +1,40 @@
 import * as RadixModal from "@radix-ui/react-dialog";
-import { type GetServerSideProps } from "next";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { type ReactNode, useEffect, useState } from "react";
+import React, { type ReactNode } from "react";
 import { type DateRange } from "react-day-picker";
-import { z } from "zod";
-import { DatePickerWithRange } from "../components/DatePickerWithRange";
-import Layout from "../components/Layout";
-import { Spinner } from "../components/Spinner";
-import {
-  type Expense,
-  type ExpenseCategoryWithBaseColor,
-} from "../server/api/routers/router";
-import { getServerAuthSession } from "../server/auth";
-import { api } from "../utils/api";
-import { cents_to_dollars_display } from "../utils/centsToDollarDisplay";
-import { cn } from "../utils/cn";
+import { DatePickerWithRange } from "src/components/DatePickerWithRange";
+import Layout from "src/components/Layout";
+import { Spinner } from "src/components/Spinner";
+import { auth_client } from "src/utils/auth-client";
+import { cents_to_dollars_display } from "src/utils/centsToDollarDisplay";
 import {
   BUTTON_HOVER_CLASSES,
   RADIX_MODAL_CONTENT_CLASSES,
   RADIX_MODAL_OVERLAY_CLASSES,
   SIGN_IN_ROUTE,
   SPINNER_CLASSES,
-} from "../utils/constants";
-import { get_category_ids_to_colors } from "../utils/getCategoryIdsToColors";
-import { get_category_ids_to_names } from "../utils/getCategoryIdsToNames";
-import { BASE_COLORS, type BaseColor } from "../utils/tailwind-colors";
-import { TW_COLORS_MP } from "../utils/tailwindColorsMp";
+} from "src/utils/constants";
+import { get_category_ids_to_colors } from "src/utils/getCategoryIdsToColors";
+import { get_category_ids_to_names } from "src/utils/getCategoryIdsToNames";
+import { BASE_COLORS, type BaseColor } from "src/utils/tailwind-colors";
+import { TW_COLORS_MP } from "src/utils/tailwindColorsMp";
 import {
-  type DMY,
-  type ExpenseDataByDay,
+  type Expense,
+  type ExpenseCategoryWithBaseColor,
+} from "src/utils/types";
+import { use_create_expense_category_mtn } from "src/utils/useCreateExpenseCategoryMtn";
+import { use_create_expense_mtn } from "src/utils/useCreateExpenseMtn";
+import { use_delete_expense_mutn } from "src/utils/useDeleteExpenseMtn";
+import { use_expense_categories_qry } from "src/utils/useExpenseCategoriesQry";
+import { z } from "zod";
+import { cn } from "../utils/cn";
+import {
   process_days_with_expenses,
   use_expenses_over_date_range,
+  type DMY,
+  type ExpenseDataByDay,
 } from "../utils/useExpenses";
 import { getDayName } from "./sign-in";
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const session = await getServerAuthSession(ctx);
-  return {
-    props: { session },
-  };
-};
 
 export function date_to_dmy(date: Date): DMY {
   return {
@@ -61,11 +55,11 @@ function get_initial_date_range(): DateRange | undefined {
     return undefined;
   }
   const local_storage_date_range_str = localStorage.getItem(
-    EXPENSES_DATE_RANGE_LOCAL_STORAGE_KEY
+    EXPENSES_DATE_RANGE_LOCAL_STORAGE_KEY,
   );
   if (local_storage_date_range_str) {
     const parsed = DateRangeSchema.safeParse(
-      JSON.parse(local_storage_date_range_str)
+      JSON.parse(local_storage_date_range_str),
     );
     if (parsed.success) {
       return {
@@ -77,19 +71,18 @@ function get_initial_date_range(): DateRange | undefined {
   return undefined;
 }
 export default function Expenses() {
-  const api_utils = api.useUtils();
-  const session = useSession();
   const router = useRouter();
   const today = new Date();
-  const [client, set_client] = useState(false);
-  const [date, set_date] = useState<DateRange | undefined>(
-    get_initial_date_range()
+  const [client, set_client] = React.useState(false);
+  const [date, set_date] = React.useState<DateRange | undefined>(
+    get_initial_date_range(),
   );
+
   function set_date_with_local_storage(new_date: DateRange | undefined) {
     if (new_date && new_date.from && new_date.to) {
       localStorage.setItem(
         EXPENSES_DATE_RANGE_LOCAL_STORAGE_KEY,
-        JSON.stringify(new_date)
+        JSON.stringify(new_date),
       );
     }
     if (!new_date) {
@@ -104,21 +97,28 @@ export default function Expenses() {
       : undefined; //...otherwise not
 
   const expense_qry = use_expenses_over_date_range(date_range);
+  // const expense_qry = use_expenses_over_date_range(date_range);
 
-  useEffect(() => {
+  React.useEffect(() => {
     set_client(true);
   }, []);
-  useEffect(() => {
-    if (session.status === "unauthenticated") {
+  const session_qry = auth_client.useSession();
+  React.useEffect(() => {
+    const is_authed =
+      session_qry.data && session_qry.data.session && session_qry.data.user;
+    if (!is_authed) {
       void router.push(SIGN_IN_ROUTE);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session.status]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session_qry.isPending]);
+
   if (!client) {
     return undefined;
   }
 
-  if (session.status === "loading" || session.status === "unauthenticated") {
+  const is_authed =
+    session_qry.data && session_qry.data.session && session_qry.data.user;
+  if (session_qry.isPending || is_authed) {
     return (
       <div className="flex h-screen items-center justify-center bg-charmander p-1 dark:bg-khazix md:p-4">
         <Spinner className={SPINNER_CLASSES} />
@@ -168,16 +168,16 @@ export default function Expenses() {
           expense_qry.data.days.length > 0 && (
             <ChronologicalExpenseList
               invalidate_expenses_qry={() => {
-                void api_utils.router.get_expenses_over_date_range.invalidate();
+                // void api_utils.router.get_expenses_over_date_range.invalidate();
               }}
               expenses_by_day={process_days_with_expenses({
                 days: expense_qry.data.days,
               })}
               category_id_to_name={get_category_ids_to_names(
-                expense_qry.data.expense_categories
+                expense_qry.data.expense_categories,
               )}
               category_id_to_color={get_category_ids_to_colors(
-                expense_qry.data.expense_categories
+                expense_qry.data.expense_categories,
               )}
             />
           )}
@@ -185,10 +185,10 @@ export default function Expenses() {
           triggerClassnames={cn(
             "fixed bottom-5 right-5 flex h-12 w-12 items-center justify-center rounded-full bg-squirtle p-0 shadow shadow-blue-300 hover:cursor-pointer dark:bg-rengar",
             "md:bottom-14 md:right-14 md:h-14 md:w-14",
-            "lg:shadow-md lg:shadow-blue-300 lg:transition-all lg:hover:-translate-y-0.5 lg:hover:shadow-lg lg:hover:shadow-blue-300 lg:hover:brightness-110"
+            "lg:shadow-md lg:shadow-blue-300 lg:transition-all lg:hover:-translate-y-0.5 lg:hover:shadow-lg lg:hover:shadow-blue-300 lg:hover:brightness-110",
           )}
           on_create_success={() => {
-            void api_utils.router.get_expenses_over_date_range.invalidate();
+            // void api_utils.router.get_expenses_over_date_range.invalidate();
           }}
           month={today.getMonth() + 1}
           day={today.getDate()}
@@ -207,7 +207,7 @@ function ChronologicalExpenseList({
   category_id_to_color,
   invalidate_expenses_qry,
 }: {
-  expenses_by_day: ExpenseDataByDay[];
+  expenses_by_day: Array<ExpenseDataByDay>;
   category_id_to_color: Map<string, BaseColor>;
   category_id_to_name: Map<string, string>;
   invalidate_expenses_qry: () => void;
@@ -229,7 +229,7 @@ function ChronologicalExpenseList({
                 <h1
                   className={cn(
                     "inline rounded-lg bg-squirtle px-2 py-1 text-sm font-bold text-white",
-                    "dark:bg-rengar lg:p-2 lg:text-base"
+                    "dark:bg-rengar lg:p-2 lg:text-base",
                   )}
                 >
                   {getDayName(new Date(year, month - 1, day).getDay())}{" "}
@@ -309,7 +309,7 @@ function ExpenseListForDay({
                 "flex items-center rounded-lg",
                 "px-2 py-1 text-sm font-bold md:text-base ",
                 TW_COLORS_MP["bg"][category_color][200],
-                TW_COLORS_MP["text"][category_color][700]
+                TW_COLORS_MP["text"][category_color][700],
               )}
             >
               {category_name} +
@@ -331,7 +331,7 @@ function ExpenseListForDay({
             );
           })}
         </ul>
-      </li>
+      </li>,
     );
   }
   return <>{output}</>;
@@ -346,18 +346,28 @@ function ExpenseButton({
   category_color: BaseColor;
   on_delete: () => void;
 }) {
-  const [is_modal_open, set_is_modal_open] = useState(false);
+  const [is_modal_open, set_is_modal_open] = React.useState(false);
   // const expense_data_qry = use_expenses();
-  const delete_expense_mutn = api.router.delete_expense.useMutation({
-    onSuccess: () => {
+  const delete_expense_mutn = use_delete_expense_mutn({
+    on_success: () => {
       // expense_data_qry.invalidate_queries();
       on_delete();
       set_is_modal_open(false); //TODO: Have to figure out how to close the modal once the new data comes in
     },
-    onError: () => {
+    on_error: () => {
       alert("error");
     },
   });
+  // const delete_expense_mutn = api.router.delete_expense.useMutation({
+  //   onSuccess: () => {
+  //     // expense_data_qry.invalidate_queries();
+  //     on_delete();
+  //     set_is_modal_open(false); //TODO: Have to figure out how to close the modal once the new data comes in
+  //   },
+  //   onError: () => {
+  //     alert("error");
+  //   },
+  // });
 
   return (
     <RadixModal.Root
@@ -371,7 +381,7 @@ function ExpenseButton({
           <button
             className={cn(
               TW_COLORS_MP["bg"][category_color][500],
-              "rounded-full px-2 text-white hover:cursor-pointer hover:opacity-80 dark:hover:opacity-100 dark:hover:brightness-110"
+              "rounded-full px-2 text-white hover:cursor-pointer hover:opacity-80 dark:hover:opacity-100 dark:hover:brightness-110",
             )}
             title="Delete expense"
           >
@@ -385,13 +395,13 @@ function ExpenseButton({
           className={cn(
             RADIX_MODAL_CONTENT_CLASSES,
             "fixed left-1/2 top-1/2 flex w-full -translate-x-1/2 -translate-y-1/2 flex-col rounded border-t-8 border-t-red-500 bg-pikachu dark:bg-leblanc",
-            "px-5 py-3 md:top-1/2 md:w-[30rem] md:rounded-lg lg:px-8 lg:py-6"
+            "px-5 py-3 md:top-1/2 md:w-[30rem] md:rounded-lg lg:px-8 lg:py-6",
           )}
         >
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              delete_expense_mutn.mutate({ id: expense.id });
+              delete_expense_mutn.mutate({ expense_id: expense.id });
             }}
           >
             <RadixModal.Title className="whitespace-nowrap text-2xl font-semibold text-slate-700 dark:text-white">
@@ -407,7 +417,7 @@ function ExpenseButton({
                 // className="h-[2rem] w-[4.5rem] rounded-full bg-slate-500 text-xs font-semibold text-white hover:brightness-110 lg:h-[3rem] lg:w-[7rem] lg:text-base lg:font-bold"
                 className={cn(
                   "h-[2rem] w-[4.5rem] rounded-full bg-slate-500 text-xs font-medium text-white",
-                  "transition-colors hover:brightness-110 lg:h-[2.5rem] lg:w-[6rem] lg:text-base"
+                  "transition-colors hover:brightness-110 lg:h-[2.5rem] lg:w-[6rem] lg:text-base",
                 )}
                 type="button"
                 onClick={() => set_is_modal_open(false)}
@@ -417,7 +427,7 @@ function ExpenseButton({
               <button
                 className={cn(
                   "h-[2rem] w-[4.5rem] rounded-full bg-red-500 text-xs font-medium text-white",
-                  "flex items-center justify-center transition-colors hover:brightness-110 lg:h-[2.5rem] lg:w-[6rem] lg:text-base"
+                  "flex items-center justify-center transition-colors hover:brightness-110 lg:h-[2.5rem] lg:w-[6rem] lg:text-base",
                   // "flex w-[4.5rem] items-center justify-center rounded-full bg-red-500 text-xs font-semibold text-white lg:h-[3rem] lg:w-[7rem] lg:text-base lg:font-bold"
                 )}
                 type="submit"
@@ -443,7 +453,7 @@ export function is_valid_amount(amount: string) {
   return AMOUNT_REGEX.test(amount) && !is_zero_amount;
 }
 const DATE_REGEX = new RegExp(
-  /^(0?[1-9]|1[012])[/](0?[1-9]|[12][0-9]|3[01])[/](19|20)\d\d$/
+  /^(0?[1-9]|1[012])[/](0?[1-9]|[12][0-9]|3[01])[/](19|20)\d\d$/,
 );
 export function is_valid_date(date_str: string) {
   return DATE_REGEX.test(date_str);
@@ -451,7 +461,7 @@ export function is_valid_date(date_str: string) {
 function extract_date_fields(date_str: string) {
   if (!is_valid_date(date_str)) {
     throw new Error(
-      "Invalid date string passed to 'extract_date_fields' function"
+      "Invalid date string passed to 'extract_date_fields' function",
     );
   }
   const split = date_str.trim().split("/");
@@ -484,48 +494,67 @@ function AddNewExpenseButtonAndModal({
   expense_category_color?: BaseColor;
   children: ReactNode;
 }) {
-  const [amount, set_amount] = useState("");
-  const [is_modal_open, set_is_modal_open] = useState(false);
-  const [category_text, set_category_text] = useState(
-    expense_category_name ?? ""
+  const [amount, set_amount] = React.useState("");
+  const [is_modal_open, set_is_modal_open] = React.useState(false);
+  const [category_text, set_category_text] = React.useState(
+    expense_category_name ?? "",
   );
   const [is_category_dropdown_open, set_is_category_dropdown_open] =
-    useState(false);
-  const [color, set_color] = useState<BaseColor>(
-    expense_category_color ?? "pink"
+    React.useState(false);
+  const [color, set_color] = React.useState<BaseColor>(
+    expense_category_color ?? "pink",
   );
-  const [date, set_date] = useState(`${month}/${day}/${year}`);
+  const [date, set_date] = React.useState(`${month}/${day}/${year}`);
   const [is_color_selection_open, set_is_color_selection_open] =
-    useState(false);
+    React.useState(false);
 
-  const expense_categories_qry = api.router.get_categories.useQuery();
+  const expense_categories_qry = use_expense_categories_qry();
+  // const expense_categories_qry = api.router.get_categories.useQuery();
 
-  const create_expense_mtn = api.router.create_expense.useMutation({
-    onSuccess: () => {
+  const create_expense_mtn = use_create_expense_mtn({
+    on_success: () => {
       set_is_modal_open(false);
       on_create_success();
     },
-    onError: (err, data) => {
-      console.log(err, data);
+    on_error: () => {
       alert("error");
     },
   });
-  const create_category_and_expense_mtn =
-    api.router.create_category.useMutation({
-      onSuccess: (data) => {
-        create_expense_mtn.mutate({
-          category_id: data.id,
-          amount: amount,
-          date: extract_date_fields(date),
-        });
-      },
-      onError: () => {
-        alert("error in create_caegory_and_expense");
-      },
-    });
+  // const create_expense_mtn = api.router.create_expense.useMutation({
+  //   onSuccess: () => {
+  //     set_is_modal_open(false);
+  //     on_create_success();
+  //   },
+  //   onError: (err, data) => {
+  //     console.log(err, data);
+  //     alert("error");
+  //   },
+  // });
+  const create_category_and_expense_mtn = use_create_expense_category_mtn({
+    on_success: (data) => {
+      create_expense_mtn.mutate({
+        category_id: data.id,
+        amount: amount,
+        date: extract_date_fields(date),
+      });
+    },
+  });
+  // const create_category_and_expense_mtn =
+  //   api.router.create_category.useMutation({
+  //     onSuccess: (data) => {
+  //       create_expense_mtn.mutate({
+  //         category_id: data.id,
+  //         amount: amount,
+  //         date: extract_date_fields(date),
+  //       });
+  //     },
+  //     onError: () => {
+  //       alert("error in create_caegory_and_expense");
+  //     },
+  //   });
 
   function handle_create_expense(
-    expense_categories: ExpenseCategoryWithBaseColor[]
+    expense_categories: Array<ExpenseCategoryWithBaseColor>,
   ) {
     const does_category_exist =
       expense_categories.filter((exp) => exp.name === category_text).length > 0;
@@ -594,7 +623,7 @@ function AddNewExpenseButtonAndModal({
           className={cn(
             RADIX_MODAL_CONTENT_CLASSES,
             "fixed left-1/2 top-0 w-full -translate-x-1/2 rounded border-t-8 border-t-squirtle bg-pikachu dark:border-t-rengar dark:bg-leblanc",
-            "p-4 md:top-1/2 md:w-[40rem] md:-translate-y-1/2 md:rounded-lg lg:p-8"
+            "p-4 md:top-1/2 md:w-[40rem] md:-translate-y-1/2 md:rounded-lg lg:p-8",
           )}
         >
           <form
@@ -667,7 +696,7 @@ function AddNewExpenseButtonAndModal({
                     TW_COLORS_MP["bg"][color][500],
                     does_category_exist
                       ? "hover:cursor-not-allowed"
-                      : "hover:cursor-pointer hover:brightness-110"
+                      : "hover:cursor-pointer hover:brightness-110",
                   )}
                 ></button>
                 {is_color_selection_open && (
@@ -688,7 +717,7 @@ function AddNewExpenseButtonAndModal({
                             option === color
                               ? "border-slate-900 brightness-110 hover:cursor-default dark:border-white"
                               : "hover:cursor-pointer  hover:border-slate-900 hover:brightness-110 dark:hover:border-white",
-                            "md:h-7 md:w-7"
+                            "md:h-7 md:w-7",
                           )}
                         />
                       );
@@ -738,7 +767,7 @@ function AddNewExpenseButtonAndModal({
                                   key={exp.id}
                                   className={cn(
                                     "flex items-center gap-3 rounded border border-squirtle_light px-3 py-2 dark:border-violet-300",
-                                    BUTTON_HOVER_CLASSES
+                                    BUTTON_HOVER_CLASSES,
                                   )}
                                   onClick={() => {
                                     set_category_text(exp.name);
@@ -750,7 +779,7 @@ function AddNewExpenseButtonAndModal({
                                   <div
                                     className={cn(
                                       "h-4 w-4 rounded-full",
-                                      TW_COLORS_MP["bg"][exp.color][500]
+                                      TW_COLORS_MP["bg"][exp.color][500],
                                     )}
                                   />
                                   <p>{exp.name}</p>
@@ -761,7 +790,7 @@ function AddNewExpenseButtonAndModal({
                             <li
                               className={cn(
                                 "rounded p-2 text-slate-700 dark:text-white",
-                                BUTTON_HOVER_CLASSES
+                                BUTTON_HOVER_CLASSES,
                               )}
                               onClick={() => {
                                 set_is_category_dropdown_open(false);
@@ -785,7 +814,7 @@ function AddNewExpenseButtonAndModal({
                 <button
                   className={cn(
                     "h-[2rem] w-[4.5rem] rounded-full bg-slate-500 text-xs font-medium text-white",
-                    "transition-colors hover:brightness-110 lg:h-[2.5rem] lg:w-[6rem] lg:text-base"
+                    "transition-colors hover:brightness-110 lg:h-[2.5rem] lg:w-[6rem] lg:text-base",
                   )}
                   type="button"
                 >
@@ -797,7 +826,7 @@ function AddNewExpenseButtonAndModal({
                   "flex h-[2rem] w-[4.5rem] items-center justify-center rounded-full bg-squirtle text-xs font-medium text-white dark:bg-rengar lg:h-[2.5rem] lg:w-[6rem] lg:text-base",
                   is_create_expense_button_disabled
                     ? "opacity-50"
-                    : "hover:cursor-pointer hover:brightness-110"
+                    : "hover:cursor-pointer hover:brightness-110",
                 )}
                 type="submit"
                 disabled={is_create_expense_button_disabled}
@@ -815,6 +844,7 @@ function AddNewExpenseButtonAndModal({
     </RadixModal.Root>
   );
 }
+
 export function Fab() {
   /* https://tailwindcomponents.com/component/tailwind-css-fab-buttons */
   return (

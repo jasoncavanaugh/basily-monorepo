@@ -28,7 +28,7 @@ export function ThemeButton({
       }}
       className={cn(
         "flex gap-4 rounded-md p-2 hover:cursor-pointer hover:bg-slate-200 dark:hover:bg-jinx",
-        className
+        className,
       )}
     >
       {theme === "light" ? (

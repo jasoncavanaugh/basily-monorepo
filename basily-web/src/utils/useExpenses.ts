@@ -1,11 +1,12 @@
-import { api } from "./api";
+/* eslint-disable react-hooks/rules-of-hooks */
+import { useQuery } from "@tanstack/react-query";
 import { subYears } from "date-fns";
 import { create } from "zustand";
 import {
-  DayWithExpenses,
-  Expense,
-  ExpenseCategoryWithBaseColor,
-} from "../server/api/routers/router";
+  type DayWithExpenses,
+  type Expense,
+  type ExpenseCategoryWithBaseColor,
+} from "./types";
 
 export type DMY = {
   day: number;
@@ -31,16 +32,16 @@ const use_api_date_store = create<ExpensesStoreState>((set) => {
   };
 });
 
-/*
-Always fetch whole years of dates. Filter on the frontend.
-Expenses page -> Should only be able to display 365 days of expenses at a time.
-*/
+/**
+ * Always fetch whole years of dates. Filter on the frontend.
+ * Expenses page -> Should only be able to display 365 days of expenses at a time.
+ */
 export type UseExpensesOverDateRangeData = {
   days: Array<DayWithExpenses>;
   expense_categories: Array<ExpenseCategoryWithBaseColor>;
 };
 export function use_expenses_over_date_range(
-  date_picker_dates: { from_date: DMY; to_date: DMY } | undefined
+  date_picker_dates: { from_date: DMY; to_date: DMY } | undefined,
 ) {
   const expenses_store = use_api_date_store();
   let api_from_year = expenses_store.from_year;
@@ -55,60 +56,70 @@ export function use_expenses_over_date_range(
       expenses_store.set_to_year(date_picker_dates.to_date.year);
     }
   }
-
-  return api.router.get_expenses_over_date_range.useQuery(
-    {
-      from_year: api_from_year,
-      to_year: api_to_year,
+  return useQuery({
+    queryKey: ["/api/get_expenses_over_date_range", api_from_year, api_to_year],
+    queryFn: async () => {
+      const resp = await fetch(`/api/get_expenses_over_date_range`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          from_year: api_from_year,
+          to_year: api_to_year,
+        }),
+      });
+      if (!resp.ok) {
+        throw new Error();
+      }
+      return resp.json() as Promise<UseExpensesOverDateRangeData>;
     },
-    {
-      select: (data) => {
-        let days: Array<DayWithExpenses> = [];
-        if (!date_picker_dates) {
-          days = data.days.slice(0, 30);
+    select: (data) => {
+      let days: Array<DayWithExpenses> = [];
+      if (!date_picker_dates) {
+        days = data.days.slice(0, 30);
+      }
+      const from = date_picker_dates?.from_date;
+      const to = date_picker_dates?.to_date;
+      if (!from || !to) {
+        return { ...data, days: data.days.slice(0, 30) };
+      }
+      days = data.days.filter((d) => {
+        const from_year = from.year;
+        const from_month_idx = from.month_idx;
+        const from_day = from.day;
+
+        const to_year = to.year;
+        const to_month_idx = to.month_idx;
+        const to_day = to.day;
+
+        if (d.year < from_year || d.year > to_year) {
+          return false;
         }
-        const from = date_picker_dates?.from_date;
-        const to = date_picker_dates?.to_date;
-        if (!from || !to) {
-          return { ...data, days: data.days.slice(0, 30) };
+        if (d.year > from_year && d.year < to_year) {
+          return true;
         }
-        days = data.days.filter((d) => {
-          const from_year = from.year;
-          const from_month_idx = from.month_idx;
-          const from_day = from.day;
 
-          const to_year = to.year;
-          const to_month_idx = to.month_idx;
-          const to_day = to.day;
-
-          if (d.year < from_year || d.year > to_year) {
-            return false;
-          }
-          if (d.year > from_year && d.year < to_year) {
-            return true;
-          }
-
-          let is_after_from = true;
-          if (d.year === from_year) {
-            const is_after_month = d.month > from_month_idx;
-            const same_month_but_after_day =
-              d.month === from_month_idx && d.day >= from_day;
-            is_after_from = is_after_month || same_month_but_after_day;
-          }
-          let is_before_to = true;
-          if (d.year === to_year) {
-            const is_before_month = d.month < to_month_idx;
-            const is_same_month_but_before_day =
-              d.month === to_month_idx && d.day <= to_day;
-            is_before_to = is_before_month || is_same_month_but_before_day;
-          }
-          return is_after_from && is_before_to;
-        });
-        const output: UseExpensesOverDateRangeData = { ...data, days: days };
-        return output;
-      },
-    }
-  );
+        let is_after_from = true;
+        if (d.year === from_year) {
+          const is_after_month = d.month > from_month_idx;
+          const same_month_but_after_day =
+            d.month === from_month_idx && d.day >= from_day;
+          is_after_from = is_after_month || same_month_but_after_day;
+        }
+        let is_before_to = true;
+        if (d.year === to_year) {
+          const is_before_month = d.month < to_month_idx;
+          const is_same_month_but_before_day =
+            d.month === to_month_idx && d.day <= to_day;
+          is_before_to = is_before_month || is_same_month_but_before_day;
+        }
+        return is_after_from && is_before_to;
+      });
+      const output: UseExpensesOverDateRangeData = { ...data, days: days };
+      return output;
+    },
+  });
 }
 
 export type ExpenseDataByDay = {
@@ -137,9 +148,9 @@ export function process_days_with_expenses({
     return 0;
   });
 
-  let processed_expense_data: ExpenseDataByDay[] = [];
+  const processed_expense_data: ExpenseDataByDay[] = [];
   for (const dwe of days_with_expenses) {
-    const category_id_to_expenses = new Map<string, Expense[]>();
+    const category_id_to_expenses = new Map<string, Array<Expense>>();
     const expenses_for_day = dwe.expenses;
     let total_expenses_for_day = 0;
     for (const ex of expenses_for_day) {

@@ -25,7 +25,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                 "w-[6rem] py-1 text-sm font-semibold text-squirtle dark:border-transparent",
                 "hover:brightness-110 dark:text-rengar md:w-[8rem] md:text-lg",
                 "hover:cursor-pointer hover:bg-slate-300 dark:hover:bg-jinx dark:hover:opacity-80",
-                cur_route !== "/visualize" && "bg-slate-200 dark:bg-jinx"
+                cur_route !== "/visualize" && "bg-slate-200 dark:bg-jinx",
               )}
             >
               Expenses
@@ -38,7 +38,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                 "w-[6rem] py-1 text-sm font-semibold text-squirtle dark:border-transparent",
                 "hover:brightness-110 dark:text-rengar md:w-[8rem] md:text-lg",
                 "hover:cursor-pointer hover:bg-slate-300 dark:hover:bg-jinx dark:hover:opacity-80",
-                cur_route === "/visualize" && "bg-slate-200 dark:bg-jinx"
+                cur_route === "/visualize" && "bg-slate-200 dark:bg-jinx",
               )}
             >
               Visualize

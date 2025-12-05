@@ -1,7 +1,7 @@
-import { ExpenseCategoryWithBaseColor } from "src/server/api/routers/router";
+import { type ExpenseCategoryWithBaseColor } from "./types";
 
 export function get_category_ids_to_names(
-  expense_categories: ExpenseCategoryWithBaseColor[]
+  expense_categories: ExpenseCategoryWithBaseColor[],
 ) {
   const category_id_to_name = new Map<string, string>();
   for (const cat of expense_categories) {

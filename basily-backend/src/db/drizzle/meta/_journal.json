@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1764263020964,
-      "tag": "0000_windy_mandroid",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1764267938414,
-      "tag": "0001_stale_valeria_richards",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1764781022189,
-      "tag": "0002_low_ultimatum",
+      "when": 1764889615481,
+      "tag": "0000_redundant_karma",
       "breakpoints": true
     }
   ]

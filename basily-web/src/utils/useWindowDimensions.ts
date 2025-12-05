@@ -13,7 +13,7 @@ export function useWindowDimensions() {
   }
 
   const [windowDimensions, setWindowDimensions] = React.useState(
-    getWindowDimensions()
+    getWindowDimensions(),
   );
 
   React.useEffect(() => {

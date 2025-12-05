@@ -28,7 +28,7 @@ function Calendar({
         nav: "space-x-1 flex items-center",
         nav_button: cn(
           buttonVariants({ variant: "outline" }),
-          "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100"
+          "h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100",
         ),
         nav_button_previous: "absolute left-1",
         nav_button_next: "absolute right-1",
@@ -42,16 +42,16 @@ function Calendar({
           "h-9 w-9 text-center text-sm p-0 relative rounded-none",
           "[&:has([aria-selected])]:bg-onyx dark:[&:has([aria-selected])]:bg-shaco",
           "first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md",
-          "focus-within:relative focus-within:z-20"
+          "focus-within:relative focus-within:z-20",
         ),
         day: cn(
           buttonVariants({ variant: "ghost" }),
           "day-picker-day", //STYLED IN GLOBAL.CSS
-          "h-9 w-9 p-0 font-normal aria-selected:opacity-100"
+          "h-9 w-9 p-0 font-normal aria-selected:opacity-100",
         ),
         day_selected: cn(
           "day-picker-day-selected", //STYLED IN GLOBAL.CSS
-          "bg-slate-400 rounded-none dark:bg-khazix"
+          "bg-slate-400 rounded-none dark:bg-khazix",
         ),
         day_range_start: "day-picker-day-range-start text-white", //STYLED IN GLOBAL.CSS
         day_range_end: "day-picker-day-range-end text-white", //STYLED IN GLOBAL.CSS

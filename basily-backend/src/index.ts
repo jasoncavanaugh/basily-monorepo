@@ -18,13 +18,30 @@ const app = new Hono<{
 });
 
 // CORS should be called before the route
-app.use("/api/*", cors({ origin: `https://${env.ALLOWED_ORIGINS}` }));
+// app.use("/api/*", cors({ origin: `https://${env.ALLOWED_ORIGINS}` }));
+app.use(
+  "/api/*",
+  cors({
+    origin: [`https://${env.ALLOWED_ORIGINS}`, "http://localhost:5173", "http://localhost:3001"], 
+    // ^ Access-Control-Allow-Origin: <page_origin_1>, <page_origin_2>
+    allowHeaders: ["X-Custom-Header", "Upgrade-Insecure-Requests", "Content-Type"],
+    // ^ Access-Control-Allow-Headers: X-Custom-Header, Upgrade-Insecure-Requests, Content-Type
+    allowMethods: ["POST", "GET", "OPTIONS"],
+    // ^ Access-Control-Allow-Methods: POST, GET, OPTIONS
+    exposeHeaders: ["Content-Length", "X-Kuma-Revision"],
+    // ^ Access-Control-Expose-Headers: Content-Length, X-Kuma-Revision
+    maxAge: 600,
+    // ^ Access-Control-Max-Age: 600
+    credentials: true, 
+    // ^ Access-Control-Allow-Credentials: true
+  }),
+);
 
 app.on(["POST", "GET"], "/api/auth/**", (c) => {
   return auth.handler(c.req.raw);
 });
 
-//Middleware - I don't think this is worth it
+// Middleware - I don't think this is worth it
 // app.use("/api/protected/**", async (c, next) => {
 //   const session = await auth.api.getSession({
 //     headers: c.req.raw.headers,
@@ -379,10 +396,10 @@ app.post("/api/edit_expense_category/:category_id", async (c) => {
       ),
     )
     .returning();
-    if (updated_expense_category.length === 0) {
-      return c.body(`Category with id ${category_id} not found.`, 404);
-    }
-    return c.json(updated_expense_category[0]);
+  if (updated_expense_category.length === 0) {
+    return c.body(`Category with id ${category_id} not found.`, 404);
+  }
+  return c.json(updated_expense_category[0]);
 });
 
 app.get("/", (c) => {

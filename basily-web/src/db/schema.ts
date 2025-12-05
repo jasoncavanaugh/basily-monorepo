@@ -47,7 +47,7 @@ export const days = pgTable(
       table.user_id.asc().nullsLast().op("int4_ops"),
       table.month.asc().nullsLast().op("int4_ops"),
       table.day.asc().nullsLast().op("int4_ops"),
-      table.year.asc().nullsLast().op("int4_ops")
+      table.year.asc().nullsLast().op("int4_ops"),
     ),
     foreignKey({
       columns: [table.user_id],
@@ -56,7 +56,7 @@ export const days = pgTable(
     })
       .onUpdate("cascade")
       .onDelete("cascade"),
-  ]
+  ],
 );
 
 export const expenses = pgTable(
@@ -99,7 +99,7 @@ export const expenses = pgTable(
     })
       .onUpdate("cascade")
       .onDelete("cascade"),
-  ]
+  ],
 );
 
 // NextAuth tables, do not rename property names
@@ -121,9 +121,9 @@ export const users = pgTable(
   (table) => [
     uniqueIndex("User_email_key").using(
       "btree",
-      table.email.asc().nullsLast().op("text_ops")
+      table.email.asc().nullsLast().op("text_ops"),
     ),
-  ]
+  ],
 );
 
 export const sessions = pgTable(
@@ -141,7 +141,7 @@ export const sessions = pgTable(
   (table) => [
     uniqueIndex("Session_sessionToken_key").using(
       "btree",
-      table.sessionToken.asc().nullsLast().op("text_ops")
+      table.sessionToken.asc().nullsLast().op("text_ops"),
     ),
     foreignKey({
       columns: [table.userId],
@@ -150,7 +150,7 @@ export const sessions = pgTable(
     })
       .onUpdate("cascade")
       .onDelete("cascade"),
-  ]
+  ],
 );
 
 export const verificationTokens = pgTable(
@@ -169,13 +169,13 @@ export const verificationTokens = pgTable(
     uniqueIndex("VerificationToken_identifier_token_key").using(
       "btree",
       table.identifier.asc().nullsLast().op("text_ops"),
-      table.token.asc().nullsLast().op("text_ops")
+      table.token.asc().nullsLast().op("text_ops"),
     ),
     uniqueIndex("VerificationToken_token_key").using(
       "btree",
-      table.token.asc().nullsLast().op("text_ops")
+      table.token.asc().nullsLast().op("text_ops"),
     ),
-  ]
+  ],
 );
 
 export const accounts = pgTable(
@@ -201,7 +201,7 @@ export const accounts = pgTable(
     uniqueIndex("Account_provider_providerAccountId_key").using(
       "btree",
       table.provider.asc().nullsLast().op("text_ops"),
-      table.providerAccountId.asc().nullsLast().op("text_ops")
+      table.providerAccountId.asc().nullsLast().op("text_ops"),
     ),
     foreignKey({
       columns: [table.userId],
@@ -210,7 +210,7 @@ export const accounts = pgTable(
     })
       .onUpdate("cascade")
       .onDelete("cascade"),
-  ]
+  ],
 );
 
 // RELATIONS
@@ -236,7 +236,7 @@ export const verificationTokenRelations = relations(
       fields: [verificationTokens.identifier],
       references: [users.email],
     }),
-  })
+  }),
 );
 
 export const accountRelations = relations(accounts, ({ one }) => ({
@@ -254,7 +254,7 @@ export const expenseCategoryRelations = relations(
       references: [users.id],
     }),
     expenses: many(expenses),
-  })
+  }),
 );
 
 export const dayRelations = relations(days, ({ one, many }) => ({
