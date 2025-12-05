@@ -1,4 +1,3 @@
-import { useTheme } from "next-themes";
 import Image from "next/image";
 import basily_logo from "public/logo.png";
 import { useEffect, useState } from "react";
@@ -14,7 +13,6 @@ export function Logo() {
 }
 
 function BasilyLogo() {
-  const { theme } = useTheme();
   return (
     <div className="flex items-center gap-2">
       <Image className="mt-2 w-12" src={basily_logo} alt="Basil logo" />
