@@ -6,7 +6,6 @@ import {
   LogOut,
   PieChartIcon,
 } from "lucide-react";
-import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { auth_client } from "src/utils/auth-client";
@@ -103,7 +102,7 @@ export function ProfileNav({ to_categories }: { to_categories: boolean }) {
             <li>
               <button
                 className="flex w-full gap-4 rounded-md p-2 text-red-700 hover:cursor-pointer hover:bg-red-100 dark:text-red-400 dark:hover:bg-jinx"
-                onClick={() => void signOut()}
+                onClick={() => void auth_client.signOut()}
               >
                 <LogOut className="text-red-500" strokeWidth="0.15rem" />
                 <p>Log Out</p>

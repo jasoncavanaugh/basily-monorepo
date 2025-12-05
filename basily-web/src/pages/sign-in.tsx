@@ -13,7 +13,7 @@ import {
   EXPENSES_ROUTE,
   RADIX_MODAL_CONTENT_CLASSES,
   RADIX_MODAL_OVERLAY_CLASSES,
-  SPINNER_CLASSES,
+  SPINNER_CLASSES
 } from "src/utils/constants";
 import { BASE_COLORS, type BaseColor } from "src/utils/tailwind-colors";
 import { breakpoints } from "src/utils/tailwindBreakpoints";
@@ -81,8 +81,8 @@ export default function SignIn() {
           onClick={() =>
             void auth_client.signIn.social({
               provider: "github",
-              callbackURL: "http://localhost:3001/expenses",
-              errorCallbackURL: "/",
+              callbackURL: `/expenses`,
+              errorCallbackURL: `/sign-in`,
             })
           }
         >
