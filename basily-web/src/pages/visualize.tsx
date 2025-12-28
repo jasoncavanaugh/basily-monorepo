@@ -6,11 +6,22 @@ import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { DatePickerWithRange } from "src/components/DatePickerWithRange";
 import Layout from "src/components/Layout";
 import { use_expense_categories_qry } from "src/hooks/useExpenseCategoriesQry";
-import { use_expenses_over_date_range, type UseExpensesOverDateRangeData } from "src/hooks/useExpenses";
+import {
+  use_expenses_over_date_range,
+  type UseExpensesOverDateRangeData,
+} from "src/hooks/useExpenses";
 import { use_is_authed_or_redirect } from "src/hooks/useIsAuthedOrRedirect";
 import { useWindowDimensions } from "src/hooks/useWindowDimensions";
-import { type BaseColor, breakpoints, TW_COLORS_MP, TW_COLORS_TO_HEX_MP } from "src/utils/tailwind-stuff";
-import { type ExpenseCategoryWithBaseColor, type GetExpensesOverDateRangeRet } from "src/utils/types";
+import {
+  type BaseColor,
+  breakpoints,
+  TW_COLORS_MP,
+  TW_COLORS_TO_HEX_MP,
+} from "src/utils/tailwind-stuff";
+import {
+  type ExpenseCategoryWithBaseColor,
+  type GetExpensesOverDateRangeRet,
+} from "src/utils/types";
 import { z } from "zod";
 import { Spinner, SPINNER_CLASSES } from "../components/Spinner";
 import { cents_to_dollars_display } from "../utils/centsToDollarDisplay";
@@ -188,7 +199,10 @@ export default function Visualize() {
 
   const expense_data_qry = use_expenses_over_date_range(date_range);
   const categories_qry = use_expense_categories_qry();
-  const session_qry = use_is_authed_or_redirect({ redirect_if: "unauthorized", redirect_url: SIGN_IN_ROUTE });
+  const session_qry = use_is_authed_or_redirect({
+    redirect_if: "unauthorized",
+    redirect_url: SIGN_IN_ROUTE,
+  });
 
   const is_authed =
     session_qry.data && session_qry.data.session && session_qry.data.user;
@@ -249,7 +263,7 @@ export function VisualizeContent({
 }) {
   const windowDimensions = useWindowDimensions();
   const [selected_categories, set_selected_categories] = React.useState(
-    all_categories.map((c) => c.id)
+    all_categories.map((c) => c.id),
   );
   const filtered = filter_data_over_date_range(expenses_over_date_range, date);
   const intermediate = get_data_intermediate(filtered, selected_categories);
@@ -278,14 +292,14 @@ export function VisualizeContent({
             <ul
               className={cn(
                 "mr-4 flex w-[100%] flex-col dark:bg-khazix md:h-[95%]",
-                "min-h-0 grow gap-2 rounded pl-5 pr-2 md:m-0 md:overflow-auto md:px-4 md:py-0"
+                "min-h-0 grow gap-2 rounded pl-5 pr-2 md:m-0 md:overflow-auto md:px-4 md:py-0",
               )}
             >
               {pie_chart_data
                 .sort((a, b) => (a.name < b.name ? -1 : 1))
                 .map((datum, i) => {
                   const is_selected = selected_categories.includes(
-                    datum.category_id
+                    datum.category_id,
                   );
                   return (
                     <li
@@ -293,7 +307,7 @@ export function VisualizeContent({
                       className={cn(
                         "flex items-center gap-3 bg-bulbasaur dark:bg-leblanc",
                         "rounded-lg font-bold shadow-sm shadow-slate-300 dark:shadow-leblanc",
-                        !is_selected && "opacity-50"
+                        !is_selected && "opacity-50",
                       )}
                     >
                       <div className={cn("flex items-center gap-4 p-4")}>
@@ -303,7 +317,7 @@ export function VisualizeContent({
                             if (is_selected) {
                               new_selected_categories = [
                                 ...selected_categories.filter(
-                                  (sc) => sc !== datum.category_id
+                                  (sc) => sc !== datum.category_id,
                                 ),
                               ];
                             } else {
@@ -318,13 +332,13 @@ export function VisualizeContent({
                             "h-4 w-4 rounded-full border",
                             TW_COLORS_MP["border"][datum.color]["500"],
                             is_selected &&
-                              TW_COLORS_MP["bg"][datum.color]["500"]
+                              TW_COLORS_MP["bg"][datum.color]["500"],
                           )}
                           type="button"
                         />
                         <p
                           className={cn(
-                            TW_COLORS_MP["text"][datum.color]["500"]
+                            TW_COLORS_MP["text"][datum.color]["500"],
                           )}
                         >
                           {datum.name}
@@ -354,7 +368,7 @@ type IntResp = {
 
 function filter_data_over_date_range(
   days_and_ec: GetExpensesOverDateRangeRet,
-  dateRange: DateRange | undefined
+  dateRange: DateRange | undefined,
 ): GetExpensesOverDateRangeRet {
   if (!dateRange || !dateRange.from) {
     return { days: [], expense_categories: days_and_ec.expense_categories };
@@ -402,7 +416,7 @@ function filter_data_over_date_range(
 
 function get_data_intermediate(
   days_and_ec: GetExpensesOverDateRangeRet,
-  selected_categories: Array<string>
+  selected_categories: Array<string>,
 ): IntResp {
   const out: Record<
     string,

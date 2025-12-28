@@ -11,10 +11,13 @@ export function use_delete_expense_mutn({
 }) {
   return useMutation({
     mutationFn: async ({ expense_id }: { expense_id: string }) => {
-      const resp = await fetch(`${BACKEND_URL}/api/delete_expense/${expense_id}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
+      const resp = await fetch(
+        `${BACKEND_URL}/api/delete_expense/${expense_id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        },
+      );
       if (!resp.ok) {
         throw new Error();
       }

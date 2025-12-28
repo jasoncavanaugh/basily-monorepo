@@ -1,4 +1,3 @@
-
 export const BASE_COLORS = [
   "rose",
   "pink",

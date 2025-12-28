@@ -9,7 +9,12 @@ import { use_create_expense_category_mtn } from "src/hooks/useCreateExpenseCateg
 import { use_create_expense_mtn } from "src/hooks/useCreateExpenseMtn";
 import { use_delete_expense_mutn } from "src/hooks/useDeleteExpenseMtn";
 import { use_expense_categories_qry } from "src/hooks/useExpenseCategoriesQry";
-import { process_days_with_expenses, use_expenses_over_date_range, type DMY, type ExpenseDataByDay } from "src/hooks/useExpenses";
+import {
+  process_days_with_expenses,
+  use_expenses_over_date_range,
+  type DMY,
+  type ExpenseDataByDay,
+} from "src/hooks/useExpenses";
 import { use_is_authed_or_redirect } from "src/hooks/useIsAuthedOrRedirect";
 import { cents_to_dollars_display } from "src/utils/centsToDollarDisplay";
 import {
@@ -20,11 +25,12 @@ import {
 } from "src/utils/constants";
 import { get_category_ids_to_colors } from "src/utils/getCategoryIdsToColors";
 import { get_category_ids_to_names } from "src/utils/getCategoryIdsToNames";
-import { BASE_COLORS, TW_COLORS_MP, type BaseColor } from "src/utils/tailwind-stuff";
 import {
-  type Expense,
-  type ExpenseCategory
-} from "src/utils/types";
+  BASE_COLORS,
+  TW_COLORS_MP,
+  type BaseColor,
+} from "src/utils/tailwind-stuff";
+import { type Expense, type ExpenseCategory } from "src/utils/types";
 import { z } from "zod";
 import { cn } from "../utils/cn";
 import { getDayName } from "./sign-in";
@@ -95,7 +101,10 @@ export default function Expenses() {
     set_client(true);
   }, []);
 
-  const session_qry = use_is_authed_or_redirect({ redirect_if: "unauthorized", redirect_url: SIGN_IN_ROUTE });
+  const session_qry = use_is_authed_or_redirect({
+    redirect_if: "unauthorized",
+    redirect_url: SIGN_IN_ROUTE,
+  });
 
   if (!client) {
     return undefined;
@@ -505,9 +514,7 @@ function AddNewExpenseButtonAndModal({
     },
   });
 
-  function handle_create_expense(
-    expense_categories: Array<ExpenseCategory>,
-  ) {
+  function handle_create_expense(expense_categories: Array<ExpenseCategory>) {
     const does_category_exist =
       expense_categories.filter((exp) => exp.name === category_text).length > 0;
     if (!does_category_exist) {

@@ -2,7 +2,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { subYears } from "date-fns";
 import { BACKEND_URL } from "src/utils/constants";
-import { type DayWithExpenses, type Expense, type ExpenseCategoryWithBaseColor } from "src/utils/types";
+import {
+  type DayWithExpenses,
+  type Expense,
+  type ExpenseCategoryWithBaseColor,
+} from "src/utils/types";
 import { create } from "zustand";
 
 export type DMY = {
@@ -56,17 +60,20 @@ export function use_expenses_over_date_range(
   return useQuery({
     queryKey: ["/api/get_expenses_over_date_range", api_from_year, api_to_year],
     queryFn: async () => {
-      const resp = await fetch(`${BACKEND_URL}/api/get_expenses_over_date_range`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const resp = await fetch(
+        `${BACKEND_URL}/api/get_expenses_over_date_range`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            from_year: api_from_year,
+            to_year: api_to_year,
+          }),
         },
-        credentials: "include",
-        body: JSON.stringify({
-          from_year: api_from_year,
-          to_year: api_to_year,
-        }),
-      });
+      );
       if (!resp.ok) {
         throw new Error();
       }

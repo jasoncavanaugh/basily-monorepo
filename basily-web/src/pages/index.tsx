@@ -3,10 +3,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { auth_client } from "src/utils/auth-client";
 import { Spinner, SPINNER_CLASSES } from "../components/Spinner";
-import {
-  EXPENSES_ROUTE,
-  SIGN_IN_ROUTE,
-} from "../utils/constants";
+import { EXPENSES_ROUTE, SIGN_IN_ROUTE } from "../utils/constants";
 
 const Home: NextPage = () => {
   const router = useRouter();

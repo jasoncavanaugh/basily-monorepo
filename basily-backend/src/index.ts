@@ -22,9 +22,18 @@ const app = new Hono<{
 app.use(
   "/api/*",
   cors({
-    origin: [`https://${env.ALLOWED_ORIGINS}`, "http://localhost:8080", "http://localhost:5173", "http://localhost:3001"], 
+    origin: [
+      `https://${env.ALLOWED_ORIGINS}`,
+      "http://localhost:8080",
+      "http://localhost:5173",
+      "http://localhost:3001",
+    ],
     // ^ Access-Control-Allow-Origin: <page_origin_1>, <page_origin_2>
-    allowHeaders: ["X-Custom-Header", "Upgrade-Insecure-Requests", "Content-Type"],
+    allowHeaders: [
+      "X-Custom-Header",
+      "Upgrade-Insecure-Requests",
+      "Content-Type",
+    ],
     // ^ Access-Control-Allow-Headers: X-Custom-Header, Upgrade-Insecure-Requests, Content-Type
     allowMethods: ["POST", "GET", "OPTIONS", "DELETE"],
     // ^ Access-Control-Allow-Methods: POST, GET, OPTIONS
@@ -32,7 +41,7 @@ app.use(
     // ^ Access-Control-Expose-Headers: Content-Length, X-Kuma-Revision
     maxAge: 600,
     // ^ Access-Control-Max-Age: 600
-    credentials: true, 
+    credentials: true,
     // ^ Access-Control-Allow-Credentials: true
   }),
 );

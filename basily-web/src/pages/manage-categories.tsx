@@ -3,7 +3,11 @@ import React from "react";
 import { use_edit_expense_category_mtn } from "src/hooks/useEditExpenseCategoryMtn";
 import { use_expense_categories_qry } from "src/hooks/useExpenseCategoriesQry";
 import { cn } from "src/utils/cn";
-import { BASE_COLORS, TW_COLORS_MP, type BaseColor } from "src/utils/tailwind-stuff";
+import {
+  BASE_COLORS,
+  TW_COLORS_MP,
+  type BaseColor,
+} from "src/utils/tailwind-stuff";
 import { type ExpenseCategory } from "src/utils/types";
 import { ProfileNav } from "../components/ProfileNav";
 import { Spinner, SPINNER_CLASSES } from "../components/Spinner";
@@ -30,9 +34,8 @@ export default function ManageCategories() {
       {categories_qry.status === "success" &&
         categories_qry.data.length > 0 && (
           <ManageCategoriesDisplay
-            categories={categories_qry.data
-              .sort((a, b) =>
-              a.name < b.name ? -1 : 1
+            categories={categories_qry.data.sort((a, b) =>
+              a.name < b.name ? -1 : 1,
             )}
           />
         )}
@@ -53,7 +56,7 @@ function ManageCategoriesDisplay({
     );
   }
   const [selected_category_idx, set_selected_category_idx] = React.useState(
-    categories.at(0)!.id
+    categories.at(0)!.id,
   );
   const selected_cat = categories.find((c) => c.id === selected_category_idx);
   if (!selected_cat) {
@@ -62,7 +65,7 @@ function ManageCategoriesDisplay({
   }
 
   const [edited_category_text, set_edited_category_text] = React.useState(
-    selected_cat.name
+    selected_cat.name,
   );
   const [edited_category_color, set_edited_category_color] =
     React.useState<BaseColor>(selected_cat.color);
@@ -70,7 +73,7 @@ function ManageCategoriesDisplay({
     set_edited_category_text(selected_cat.name);
     set_edited_category_color(selected_cat.color);
   }, [selected_category_idx]);
-  const edit_category_mtn = use_edit_expense_category_mtn()
+  const edit_category_mtn = use_edit_expense_category_mtn();
 
   const does_category_exist = categories.find((c, i) => {
     return (
@@ -96,7 +99,7 @@ function ManageCategoriesDisplay({
                     "flex w-full items-center gap-2 rounded-md border p-2 dark:border-none",
                     cate.id === selected_category_idx
                       ? "bg-pikachu dark:bg-leblanc"
-                      : "hover:cursor-pointer hover:bg-pikachu hover:opacity-80 hover:dark:bg-leblanc"
+                      : "hover:cursor-pointer hover:bg-pikachu hover:opacity-80 hover:dark:bg-leblanc",
                   )}
                   onClick={() => {
                     if (cate.id !== selected_category_idx) {
@@ -107,7 +110,7 @@ function ManageCategoriesDisplay({
                   <div
                     className={cn(
                       "h-4 w-4 rounded-full",
-                      TW_COLORS_MP["bg"][cate.color]["500"]
+                      TW_COLORS_MP["bg"][cate.color]["500"],
                     )}
                   />
                   <p>{cate.name}</p>
@@ -136,7 +139,7 @@ function ManageCategoriesDisplay({
               type="text"
               className={cn(
                 "w-full border-none bg-charmander text-3xl font-bold text-cyan-900 dark:bg-khazix dark:text-white",
-                "focus:outline-none"
+                "focus:outline-none",
               )}
               value={edited_category_text}
               onChange={(e) => set_edited_category_text(e.target.value)}
@@ -145,13 +148,13 @@ function ManageCategoriesDisplay({
               {does_category_exist
                 ? "Category already exists"
                 : is_category_empty
-                ? "Category name must not be empty"
-                : ""}
+                  ? "Category name must not be empty"
+                  : ""}
             </p>
           </div>
           <div
             className={cn(
-              "flex grow flex-wrap items-center rounded-lg md:justify-between"
+              "flex grow flex-wrap items-center rounded-lg md:justify-between",
               // "md:h-[200px] md:w-[150px] md:flex-col md:gap-1"
             )}
           >
@@ -170,7 +173,7 @@ function ManageCategoriesDisplay({
                     option === edited_category_color
                       ? "border-slate-900 brightness-110 hover:cursor-default dark:border-white"
                       : "hover:cursor-pointer  hover:border-slate-900 hover:brightness-110 dark:hover:border-white",
-                    "md:h-7 md:w-7"
+                    "md:h-7 md:w-7",
                   )}
                 />
               );
@@ -185,7 +188,7 @@ function ManageCategoriesDisplay({
                 "dark:bg-rengar lg:h-[3rem] lg:w-[8.5rem] lg:text-base",
                 is_create_expense_button_disabled
                   ? "opacity-50"
-                  : "hover:cursor-pointer hover:brightness-110"
+                  : "hover:cursor-pointer hover:brightness-110",
               )}
               disabled={is_create_expense_button_disabled}
             >

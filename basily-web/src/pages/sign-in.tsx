@@ -17,7 +17,13 @@ import {
   RADIX_MODAL_CONTENT_CLASSES,
   RADIX_MODAL_OVERLAY_CLASSES,
 } from "src/utils/constants";
-import { BASE_COLORS, breakpoints, TW_COLORS_MP, TW_COLORS_TO_HEX_MP, type BaseColor } from "src/utils/tailwind-stuff";
+import {
+  BASE_COLORS,
+  breakpoints,
+  TW_COLORS_MP,
+  TW_COLORS_TO_HEX_MP,
+  type BaseColor,
+} from "src/utils/tailwind-stuff";
 import { Fab, is_valid_amount, is_valid_date } from "./expenses";
 
 type DayWithExpensesLocal = {
@@ -32,7 +38,10 @@ type DayWithExpensesLocal = {
 };
 
 export default function SignIn() {
-  const session_qry = use_is_authed_or_redirect({ redirect_if: "authorized", redirect_url: EXPENSES_ROUTE });
+  const session_qry = use_is_authed_or_redirect({
+    redirect_if: "authorized",
+    redirect_url: EXPENSES_ROUTE,
+  });
   const [sign_in_loading, set_sign_in_loading] = React.useState(false);
   const is_authed =
     session_qry.data && session_qry.data.session && session_qry.data.user;
@@ -51,25 +60,31 @@ export default function SignIn() {
           A minimalistic expense tracker
         </p>
         <Button
-          className="rounded-full bg-squirtle px-3 py-1 text-sm font-semibold text-white shadow-sm shadow-blue-300 hover:brightness-110 w-20 md:w-24 dark:bg-rengar md:px-6 md:py-2 md:text-3xl md:text-lg"
+          className="w-20 rounded-full bg-squirtle px-3 py-1 text-sm font-semibold text-white shadow-sm shadow-blue-300 hover:brightness-110 dark:bg-rengar md:w-24 md:px-6 md:py-2 md:text-3xl md:text-lg"
           onClick={() => {
-              void auth_client.signIn.social({
+            void auth_client.signIn.social(
+              {
                 provider: "github",
-                callbackURL: `${FRONTEND_URL}/expenses`, 
+                callbackURL: `${FRONTEND_URL}/expenses`,
                 errorCallbackURL: `${FRONTEND_URL}/sign-in`,
-              }, {
+              },
+              {
                 onRequest: () => {
                   set_sign_in_loading(true);
                 },
                 onError: () => {
                   alert("Something went wrong");
                   set_sign_in_loading(false);
-                }
-              });
-            }
-          }
+                },
+              },
+            );
+          }}
         >
-          {sign_in_loading ? <Spinner className="h-4 w-4 border-2 border-solid border-white lg:h-5 lg:w-5" /> : "Sign In"}
+          {sign_in_loading ? (
+            <Spinner className="h-4 w-4 border-2 border-solid border-white lg:h-5 lg:w-5" />
+          ) : (
+            "Sign In"
+          )}
         </Button>
       </div>
       <BasilPreview />
