@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "mobile",
-    "slug": "mobile",
+    "name": "basily-mobile",
+    "slug": "basily-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
-    "scheme": "mobile",
+    "scheme": "basily-mobile",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
