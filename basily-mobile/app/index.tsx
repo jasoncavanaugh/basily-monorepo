@@ -1,3 +1,4 @@
+import { auth_client } from "@/lib/auth-client";
 import { useAssets } from "expo-asset";
 import { Image } from "expo-image";
 import { Pressable, Text, View } from "react-native";
@@ -34,22 +35,22 @@ export default function Index() {
         <Pressable
           className="rounded-full bg-squirtle px-3 py-1 text-sm font-semibold text-white shadow-sm shadow-blue-300 hover:brightness-110 w-20 md:w-24 dark:bg-rengar md:px-6 md:py-2 md:text-3xl md:text-lg"
           onPress={() => {
-            // void auth.signIn.social(
-            //   {
-            //     provider: "github",
-            //     callbackURL: `exp://192.168.1.150:8081/expenses`,
-            //     errorCallbackURL: `exp://192.168.1.150:8081/sign-in`,
-            //   },
-            //   {
-            //     onRequest: () => {
-            //       set_sign_in_loading(true);
-            //     },
-            //     onError: () => {
-            //       alert("Something went wrong");
-            //       set_sign_in_loading(false);
-            //     },
-            //   },
-            // );
+            void auth_client.signIn.social(
+              {
+                provider: "github",
+                callbackURL: `exp://192.168.1.150:8081/expenses`,
+                errorCallbackURL: `exp://192.168.1.150:8081/sign-in`,
+              },
+              {
+                onRequest: () => {
+                  // set_sign_in_loading(true);
+                },
+                onError: () => {
+                  // alert("Something went wrong");
+                  // set_sign_in_loading(false);
+                },
+              },
+            );
           }}
         >
           <Text className="text-white font-semibold">Sign In</Text>
