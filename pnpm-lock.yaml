@@ -12,7 +12,7 @@ importers:
     dependencies:
       '@better-auth/expo':
         specifier: ^1.4.9
-        version: 1.4.9(@better-auth/core@1.4.3(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.21)(better-call@1.1.7(zod@4.1.13))(jose@6.1.2)(kysely@0.28.8)(nanostores@1.1.0))(better-auth@1.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(expo-constants@18.0.12)(expo-linking@8.0.11)(expo-web-browser@15.0.10(expo@54.0.30)(react-native@0.82.1(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0)))
+        version: 1.4.9(@better-auth/core@1.4.3(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.21)(better-call@1.1.7(zod@4.1.13))(jose@6.1.2)(kysely@0.28.8)(nanostores@1.1.0))(better-auth@1.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(expo-constants@18.0.12)(expo-linking@8.0.11)(expo-network@8.0.8(expo@54.0.30)(react@19.1.0))(expo-web-browser@15.0.10(expo@54.0.30)(react-native@0.82.1(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0)))
       '@hono/node-server':
         specifier: ^1.19.6
         version: 1.19.6(hono@4.10.7)
@@ -64,7 +64,7 @@ importers:
     dependencies:
       '@better-auth/expo':
         specifier: ^1.4.9
-        version: 1.4.9(@better-auth/core@1.4.3(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.18)(better-call@1.1.0)(jose@6.1.2)(kysely@0.28.8)(nanostores@1.1.0))(better-auth@1.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(expo-constants@18.0.12)(expo-linking@8.0.11)(expo-web-browser@15.0.10(expo@54.0.30)(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0)))
+        version: 1.4.9(@better-auth/core@1.4.3(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.18)(better-call@1.1.0)(jose@6.1.2)(kysely@0.28.8)(nanostores@1.1.0))(better-auth@1.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(expo-constants@18.0.12)(expo-linking@8.0.11)(expo-network@8.0.8(expo@54.0.30)(react@19.1.0))(expo-web-browser@15.0.10(expo@54.0.30)(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0)))
       '@expo/vector-icons':
         specifier: ^15.0.3
         version: 15.0.3(expo-font@14.0.10(expo@54.0.30)(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
@@ -104,6 +104,9 @@ importers:
       expo-linking:
         specifier: 8.0.11
         version: 8.0.11(expo@54.0.30)(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
+      expo-network:
+        specifier: ^8.0.8
+        version: 8.0.8(expo@54.0.30)(react@19.1.0)
       expo-router:
         specifier: 6.0.19
         version: 6.0.19(bd69773f8fee56d049a8ed8e613ff6cc)
@@ -4764,6 +4767,12 @@ packages:
       react: '*'
       react-native: '*'
 
+  expo-network@8.0.8:
+    resolution: {integrity: sha512-dgrL8UHAmWofqeY4UEjWskCl/RoQAM0DG6PZR8xz2WZt+6aQEboQgFRXowCfhbKZ71d16sNuKXtwBEsp2DtdNw==}
+    peerDependencies:
+      expo: '*'
+      react: '*'
+
   expo-router@6.0.19:
     resolution: {integrity: sha512-XK+vwpyEmGGamUM/S7+LwtjuBzbTm8VY401h8SOs8Tv1mrLl+7QNvAkk5lJiXgUVKaAIEXl8GxkWhF7mxBUzyg==}
     peerDependencies:
@@ -9207,7 +9216,7 @@ snapshots:
       nanostores: 1.1.0
       zod: 4.1.13
 
-  '@better-auth/expo@1.4.9(@better-auth/core@1.4.3(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.18)(better-call@1.1.0)(jose@6.1.2)(kysely@0.28.8)(nanostores@1.1.0))(better-auth@1.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(expo-constants@18.0.12)(expo-linking@8.0.11)(expo-web-browser@15.0.10(expo@54.0.30)(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0)))':
+  '@better-auth/expo@1.4.9(@better-auth/core@1.4.3(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.18)(better-call@1.1.0)(jose@6.1.2)(kysely@0.28.8)(nanostores@1.1.0))(better-auth@1.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(expo-constants@18.0.12)(expo-linking@8.0.11)(expo-network@8.0.8(expo@54.0.30)(react@19.1.0))(expo-web-browser@15.0.10(expo@54.0.30)(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0)))':
     dependencies:
       '@better-auth/core': 1.4.3(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.18)(better-call@1.1.0)(jose@6.1.2)(kysely@0.28.8)(nanostores@1.1.0)
       '@better-fetch/fetch': 1.1.21
@@ -9217,9 +9226,10 @@ snapshots:
     optionalDependencies:
       expo-constants: 18.0.12(expo@54.0.30)(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0))
       expo-linking: 8.0.11(expo@54.0.30)(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
+      expo-network: 8.0.8(expo@54.0.30)(react@19.1.0)
       expo-web-browser: 15.0.10(expo@54.0.30)(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0))
 
-  '@better-auth/expo@1.4.9(@better-auth/core@1.4.3(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.21)(better-call@1.1.7(zod@4.1.13))(jose@6.1.2)(kysely@0.28.8)(nanostores@1.1.0))(better-auth@1.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(expo-constants@18.0.12)(expo-linking@8.0.11)(expo-web-browser@15.0.10(expo@54.0.30)(react-native@0.82.1(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0)))':
+  '@better-auth/expo@1.4.9(@better-auth/core@1.4.3(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.21)(better-call@1.1.7(zod@4.1.13))(jose@6.1.2)(kysely@0.28.8)(nanostores@1.1.0))(better-auth@1.4.3(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(expo-constants@18.0.12)(expo-linking@8.0.11)(expo-network@8.0.8(expo@54.0.30)(react@19.1.0))(expo-web-browser@15.0.10(expo@54.0.30)(react-native@0.82.1(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0)))':
     dependencies:
       '@better-auth/core': 1.4.3(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.21)(better-call@1.1.7(zod@4.1.13))(jose@6.1.2)(kysely@0.28.8)(nanostores@1.1.0)
       '@better-fetch/fetch': 1.1.21
@@ -9229,6 +9239,7 @@ snapshots:
     optionalDependencies:
       expo-constants: 18.0.12(expo@54.0.30)(react-native@0.82.1(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0))
       expo-linking: 8.0.11(expo@54.0.30)(react-native@0.82.1(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
+      expo-network: 8.0.8(expo@54.0.30)(react@19.1.0)
       expo-web-browser: 15.0.10(expo@54.0.30)(react-native@0.82.1(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0))
 
   '@better-auth/telemetry@1.4.3(@better-auth/core@1.4.3(@better-auth/utils@0.3.0)(@better-fetch/fetch@1.1.18)(better-call@1.1.0)(jose@6.1.2)(kysely@0.28.8)(nanostores@1.1.0))':
@@ -14217,6 +14228,11 @@ snapshots:
       react: 19.1.0
       react-native: 0.82.1(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0)
     optional: true
+
+  expo-network@8.0.8(expo@54.0.30)(react@19.1.0):
+    dependencies:
+      expo: 54.0.30(@babel/core@7.28.5)(@expo/metro-runtime@6.1.2)(expo-router@6.0.19)(react-native-webview@13.15.0(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0))(react@19.1.0)
+      react: 19.1.0
 
   expo-router@6.0.19(8bb7436230b504c9c1f48c28210c198c):
     dependencies:
