@@ -1,4 +1,4 @@
-import { type BaseColor } from "./tailwind-colors";
+import { type BaseColor } from "./tailwind-stuff";
 import { type ExpenseCategoryWithBaseColor } from "./types";
 
 export function get_category_ids_to_colors(

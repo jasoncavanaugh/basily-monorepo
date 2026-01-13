@@ -127,14 +127,24 @@ function convert_to_cents(amount: string) {
 const _NUMBER_OF_ROWS_PER_PAGE = 30;
 
 async function get_auth_session({ headers }: { headers: Headers }) {
+  console.log("get_auth_session", headers);
   const session_resp = await auth.api.getSession({
     headers: headers,
   });
+  // console.log("session_resp", session_resp);
   if (!session_resp || !session_resp.user || !session_resp.session) {
     return null;
   }
   return { session: session_resp.session, user: session_resp.user };
 }
+app.get("/api/get_auth_session", async (c) => {
+  console.log("What the hell", c.req.raw.headers);
+  const auth_resp = await get_auth_session({ headers: c.req.raw.headers });
+  if (!auth_resp) {
+    return c.body(null, 401);
+  }
+  return c.json(auth_resp);
+});
 
 app.get("/api/get_expenses_paginated_by_days", async (c) => {
   const auth_resp = await get_auth_session({ headers: c.req.raw.headers });

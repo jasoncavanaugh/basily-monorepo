@@ -1,14 +1,14 @@
 import { cn } from "./cn";
 
 /* ROUTES */
-export const EXPENSES_ROUTE = "/expenses" as const;
-export const VISUALIZE_ROUTE = "/visualize" as const;
-export const SIGN_IN_ROUTE = "/sign-in" as const;
-export const MANAGE_CATEGORIES_ROUTE = "/manage-categories" as const;
+export const EXPENSES_ROUTE = "/expenses";
+export const VISUALIZE_ROUTE = "/visualize";
+export const SIGN_IN_ROUTE = "/sign-in";
+export const MANAGE_CATEGORIES_ROUTE = "/manage-categories";
 
 /* TAILWIND */
 export const BUTTON_HOVER_CLASSES =
-  "hover:bg-squirtle_light hover:cursor-pointer hover:bg-opacity-20" as const;
+  "hover:bg-squirtle_light hover:cursor-pointer hover:bg-opacity-20";
 
 export const RADIX_MODAL_OVERLAY_CLASSES = cn(
   "bg-background/80 fixed inset-0 z-20 bg-gray-500 opacity-30 dark:opacity-50",
@@ -32,5 +32,5 @@ export const RADIX_MODAL_CONTENT_CLASSES = cn(
   "data-[state=open]:slide-in-from-top-[48%]",
 );
 
-export const BACKEND_URL = "http://localhost:3000" as const;
-export const FRONTEND_URL = "http://localhost:3001" as const;
+export const BACKEND_URL = "http://localhost:3000";
+export const FRONTEND_URL = "http://localhost:3001";

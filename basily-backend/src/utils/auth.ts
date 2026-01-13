@@ -5,9 +5,7 @@ import { db } from "../db";
 import { env } from "./env";
 
 export const auth = betterAuth({
-  database: drizzleAdapter(db, {
-    provider: "pg",
-  }),
+  database: drizzleAdapter(db, { provider: "pg" }),
   plugins: [expo()],
   // Allow requests from the frontend development server
   trustedOrigins: [
@@ -25,7 +23,7 @@ export const auth = betterAuth({
       : []),
   ],
   emailAndPassword: {
-    enabled: true,
+    enabled: false,
   },
   socialProviders: {
     github: {
