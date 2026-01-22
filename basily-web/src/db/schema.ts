@@ -8,7 +8,7 @@ import {
   uniqueIndex,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm/relations";
-import { type BaseColor } from "src/utils/tailwind-colors";
+import { type BaseColor } from "src/utils/tailwind-stuff";
 
 export const expense_categories = pgTable("ExpenseCategory", {
   id: text()
